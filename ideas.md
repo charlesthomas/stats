@@ -10,11 +10,24 @@ Is the screensaver active?
 What was I actually working on?
 -------------------------------
 
+    sudo apt-get install -y xdotool
     xdotool getwindowname $(xdotool getactivewindow)
+
+
+Where am I?
+-----------
+
+Rather than tracking actual location (ie GPS coordinates), which WIFI AP I'm
+connected to is sufficient.
+
+    iwconfig wlan0 | grep ESSID | cut -f2 -d'"'
 
 
 Can I find out what the weather was like at the time?
 -----------------------------------------------------
+
+    sudo apt-get install -y weather-util weather-util-data
+    weather nyc
 
 
 What music was I listening to at the time?
