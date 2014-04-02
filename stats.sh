@@ -28,13 +28,13 @@ function get_music() {
         return 1
     fi
 
-    DBUS=$(cat /proc/$(pidof banshee)/environ | tr '\0' '\n' | grep DBUS_SESSION_BUS_ADDRESS | cut -f2- -d'=')
+    export DBUS_SESSION_BUS_ADDRESS=$(cat /proc/$(pidof banshee)/environ | tr '\0' '\n' | grep DBUS_SESSION_BUS_ADDRESS | cut -f2- -d'=')
 
-    if [[ "$($DBUS banshee --query-current-state)" != "current-state: playing" ]]; then
+    if [[ "$(banshee --query-current-state)" != "current-state: playing" ]]; then
         return 1
     fi
 
-    export MUSIC=$($DBUS banshee --query-artist --query-album --query-title)
+    export MUSIC=$(banshee --query-artist --query-album --query-title | tr '\n' ' ')
 }
 
 screensaver_active
