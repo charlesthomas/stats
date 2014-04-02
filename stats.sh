@@ -21,6 +21,10 @@ function get_weather() {
     export WEATHER=$(weather nyc | tr '\n' ' ')
 }
 
+function get_resolution() {
+    export RESOLUTION=$(xrandr -d :0 | head -1 | cut -f2 -d',' | cut -f3- -d' ')
+}
+
 function get_music() {
     PID=$(pidof banshee)
 
@@ -45,10 +49,13 @@ fi
 get_active_window
 get_location
 get_weather
-get_music
+get_resolution
 
-if [[ $? -eq 1 ]]; then
-    echo "$(date +%s) %%% $WINDOW %%% $LOCATION %%% $WEATHER"
-else
-    echo "$(date +%s) %%% $WINDOW %%% $LOCATION %%% $WEATHER %%% $MUSIC"
+STR="$(date +%s) %%% $WINDOW %%% $LOCATION %%% $WEATHER %%% $RESOLUTION"
+
+get_music
+if [[ $? -eq 0 ]]; then
+    STR=$STR" %%% $MUSIC"
 fi
+
+echo $STR
