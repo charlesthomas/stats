@@ -1,0 +1,2 @@
+#!/bin/bash
+echo $(iwconfig wlan0 | grep ESSID | cut -f2 -d'"')

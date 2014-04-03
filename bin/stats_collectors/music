@@ -1,0 +1,14 @@
+#!/bin/bash
+PID=$(pidof banshee)
+
+if [[ -z $PID ]]; then
+    exit
+fi
+
+export DBUS_SESSION_BUS_ADDRESS=$(cat /proc/$(pidof banshee)/environ | tr '\0' '\n' | grep DBUS_SESSION_BUS_ADDRESS | cut -f2- -d'=')
+
+if [[ "$(banshee --query-current-state)" != "current-state: playing" ]]; then
+    exit
+fi
+
+echo $(banshee --query-artist --query-album --query-title)

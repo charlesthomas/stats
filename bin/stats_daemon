@@ -1,0 +1,29 @@
+#!/bin/bash
+# THIS MUST BE SET MANUALLY
+USER=crthomas
+
+DISPLAY=:0.0
+COLLECTORS_DIR=/usr/bin/stats_collectors/
+OUT_DIR=/var/log/stats
+
+while true; do
+    timestamp=$(date +%Y_%m_%d_%H)
+    if [[ -z $out_file ]] || [[ "$(basename $out_file)" != "$timestamp" ]]; then
+        out_file="$OUT_DIR/$timestamp"
+        $(touch $out_file)
+        exec 1>$out_file
+    fi
+
+    if [[ "$(sudo -u $USER /usr/bin/gnome-screensaver-command -q)" == \
+            "The screensaver is inactive" ]]; then
+        for collector in $(find $COLLECTORS_DIR -type f -executable); do
+            name=$(basename $collector)
+            data=$($collector)
+            if [[ ! -z $data ]]; then
+                echo $(date +%s):$name:$data
+            fi
+        done
+    fi
+
+    sleep 5
+done

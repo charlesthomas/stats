@@ -1,0 +1,2 @@
+#!/bin/bash
+echo $(xrandr -d :0 | head -1 | cut -f2 -d',' | cut -f3- -d' ')
