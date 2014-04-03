@@ -24,7 +24,7 @@ PIDFILE="/var/run/$NAME.pid"
 
 getpid() {
 	if [ -e $PIDFILE ]; then
-		PID=`cat $PIDFILE`
+		PID=$(cat $PIDFILE)
 		if [ -e /proc/$PID ]; then
 			return 1
 		else
@@ -42,10 +42,11 @@ start() {
 	fi
 
 	echo -n "starting $NAME... "
-	$BIN
+	$BIN &
 
 	sleep 1
-	PID=`cat $PIDFILE`
+	PID=$(ps --format=pid,cmd -e | grep /usr/bin/stats_daemon | grep -v grep | cut -f1 -d' ')
+        echo -n $PID > $PIDFILE
 	echo [$PID]
 }
 

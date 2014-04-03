@@ -11,11 +11,11 @@ while true; do
     if [[ -z $out_file ]] || [[ "$(basename $out_file)" != "$timestamp" ]]; then
         out_file="$OUT_DIR/$timestamp"
         $(touch $out_file)
-        exec 1>$out_file
+        exec 1>>$out_file
     fi
 
-    if [[ "$(sudo -u $USER /usr/bin/gnome-screensaver-command -q)" == \
-            "The screensaver is inactive" ]]; then
+    if [[ "$(sudo -u $USER /usr/bin/gnome-screensaver-command -q 2>/dev/null)" \
+          == "The screensaver is inactive" ]]; then
         for collector in $(find $COLLECTORS_DIR -type f -executable); do
             name=$(basename $collector)
             data=$($collector)
